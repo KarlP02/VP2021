@@ -42,7 +42,14 @@ if(isset($_POST["todays_adjective_input"])){
 	}
 	$list_html .= "</ul>";
 
+	if(isset($_POST["photo_select_button"])){
+		$pic_num = $_POST["photo_select"];
+		$pic_file = $photo_files[$pic_num];
+		$pic_html = '<img src="' .$photo_dir .$pic_file .'" alt="Tallinna Ülikool">';
+	}
+
 	$photo_select_html = '<select name="photo_select">' ."\n";
+	$photo_select_html .= '<option value="">' .$pic_file .'</option>' ."\n";
 	for($i = 0; $i < $limit; $i ++){
 		$photo_select_html .= '<option value="' .$i .'">' .$photo_files[$i] ."</option> \n";
 	}
@@ -72,7 +79,8 @@ if(isset($_POST["todays_adjective_input"])){
 
 		?>
 		<form method="POST">
-			<?php echo $photo_select_html; ?>
+			<?php echo $photo_select_html;?>
+			<input type="submit" name="photo_select_button" value="Vali">
 		</form>
 		<?php
 		echo $pic_html;
