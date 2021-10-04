@@ -39,6 +39,19 @@
                 $_SESSION["user_id"] = $id_from_db;
                 $_SESSION["first_name"] = $firstname_from_db;
                 $_SESSION["last_name"] = $lastname_from_db;
+                //kui loeme ka kasutajaprofiili, siis saame teksti ja taustavärvi
+                //$stmt->close();
+                //loeks kasutajaprofiili, kus on selle kasutaja id
+
+                $stmt = $conn->prepare("SELECT userid FROM vp_userprofiles WHERE userid = ?");
+                echo $conn->error;
+                $stmt->bind_param("i", $_SESSION["user_id"]);
+                $stmt->bind_result($bgcolor, $txtcolor);
+                $stmt->execute();
+                if($stmt->fetch()){}
+                
+                $_SESSION["text_color"] = "#AA0000"; //#000000
+                $_SESSION["bg_color"] = "#999999"; //#FFFFFF
                 $stmt->close();
                 $conn->close();
                 header("Location: home.php");
@@ -48,6 +61,24 @@
             }
         } else {
             $notice = "Kasutajanimi või parool on vale!";
+        }
+
+        $stmt->close();
+        $conn->close();
+        return $notice;
+    }
+
+    function store_user_settings($description, $bg_color, $text_color){
+        $notice = null;
+        $conn = new mysqli($GLOBALS["server_host"], $GLOBALS["server_user_name"], $GLOBALS["server_password"], $GLOBALS["database"]);
+        $conn->set_charset("utf8");
+        $stmt = $conn->prepare("INSERT INTO vp_userprofiles (userid, description, bgcolor, txtcolor) VALUES(?,?,?,?)");
+        echo $conn->error;
+        $stmt->bind_param("ssss", $_SESSION["user_id"], $description, $bg_color, $text_color);
+        if($stmt->execute()){
+            $notice = "Uued andmed salvestati!";
+        } else {
+            $notice = "Tekkis viga!" .$stmt->error;
         }
 
         $stmt->close();
