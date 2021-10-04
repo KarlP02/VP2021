@@ -7,6 +7,7 @@
 	$todays_evaluation = null; //$todays_evaluation = "";
 	$inserted_adjective = null;
 	$adjective_error = null;
+	$login_error = null;
 
 //kontrollin kas on vajutatud submit nuppu
 if(isset($_POST["todays_adjective_input"])){
@@ -61,7 +62,11 @@ if(isset($_POST["todays_adjective_input"])){
 
 	//sisselogimine
 	if(isset($_POST["login_submit"])){
-		sign_in($_POST["email_input"], $_POST["password_input"]);
+		if(!empty($_POST["email_input"]) and !empty($_POST["password_input"])){
+			sign_in($_POST["email_input"], $_POST["password_input"]);
+		} else {
+			$login_error = "Teie email või salasõna on vale või puudu!";
+		}
 	}
 ?>
 <!DOCTYPE html>
@@ -81,6 +86,7 @@ if(isset($_POST["todays_adjective_input"])){
 			<input type="email" name="email_input" placeholder="email ehk kasutajatunnus">
 			<input type="password" name="password_input" placeholder="salasõna">
 			<input type="submit" name="login_submit" value="Logi sisse">
+			<span><?php echo $login_error; ?></span>
 		</form>
 
 		<p>Loo endale <a href="add_user.php">kasutajakonto</a></p>

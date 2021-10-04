@@ -5,6 +5,13 @@
     require_once("fnc_film.php");
 	require_once("fnc_general.php");
     
+	if(!isset($_SESSION["user_id"])){
+		header("Location: page.php");
+	}
+	if(isset($_GET["tagasi_home"])){
+		header("Location: home.php");
+	}
+
     $film_store_notice = null;
 	
 	$title_input = null;
@@ -74,6 +81,9 @@
 	<p>See leht on valminud õppetöö raames ja ei sisalda mingisugust tõsiseltvõetavat sisu!</p>
 	<p>Õppetöö toimus <a href="https://www.tlu.ee/dt">Tallinna Ülikooli Digitehnoloogiate instituudis</a>.</p>
 	<hr>
+	<ul>
+			<li><a href="?tagasi_home=1">Tagasi</a></li>
+	</ul>
     <h2>Eesti filmide lisamine andmebaasi</h2>
     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
         <label for="title_input">Filmi pealkiri</label>
