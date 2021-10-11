@@ -40,22 +40,25 @@
                 $_SESSION["first_name"] = $firstname_from_db;
                 $_SESSION["last_name"] = $lastname_from_db;
                 //kui loeme ka kasutajaprofiili, siis saame teksti ja taustavärvi
-                //$stmt->close();
+                $stmt->close();
                 //loeks kasutajaprofiili, kus on selle kasutaja id
-
-                $stmt = $conn->prepare("SELECT userid FROM vp_userprofiles WHERE userid = ?");
-                echo $conn->error;
+                $stmt = $conn->prepare("SELECT bgcolor, txtcolor FROM vp_userprofiles WHERE userid = ?");
                 $stmt->bind_param("i", $_SESSION["user_id"]);
-                $stmt->bind_result($bgcolor, $txtcolor);
+                $stmt->bind_result($bg_color, $text_color);
                 $stmt->execute();
-                if($stmt->fetch()){}
+                if($stmt->fetch()){
+                    $_SESSION["text_color"] = $text_color;
+                    $_SESSION["bg_color"] = $bg_color;
+                } else {
+                    $_SESSION["text_color"] = "#000000";
+                    $_SESSION["bg_color"] = "#FFFFFF";
+                }
                 
-                $_SESSION["text_color"] = "#AA0000"; //#000000
-                $_SESSION["bg_color"] = "#999999"; //#FFFFFF
                 $stmt->close();
                 $conn->close();
                 header("Location: home.php");
                 exit();
+                
             } else {
                 $notice = "Kasutajanimi või parool on vale!";
             }
