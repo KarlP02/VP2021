@@ -1,15 +1,18 @@
 <?php
-	//alustame sessiooni
 	session_start();
-	//kas on sisselogitud
 	if(!isset($_SESSION["user_id"])){
 		header("Location: page.php");
 	}
-	//väljalogimine
 	if(isset($_GET["logout"])){
 		session_destroy();
 		header("Location: page.php");
 	}
+
+	require_once("../../config.php");
+	//echo $server_host;
+	require_once("fnc_actors.php");
+	$films_html = null;
+	$films_html = read_all_actors();
 
 	require("page_header.php");
 ?>
@@ -20,13 +23,11 @@
 	<p>Õppetöö toimus <a href="https://www.tlu.ee/dt">Tallinna Ülikooli Digitehnoloogiate Instituudis</a>.</p>
 	<hr>
 	<ul>
-		<li><a href="list_films.php">Eesti filmide nimekiri</a></li>
-		<li><a href="list_actors.php">Näitlejad ja nende karjäär</a></li>
-		<li><a href="add_films.php">Lisa filme</a></li>
-		<li><a href="user_profile.php">Kasutajaprofiil</a></li>
-		<li><a href="movie_relations.php">Filmi info sidumine</a></li>
+		<li><a href="home.php">Tagasi</a></li>
 		<li><a href="?logout=1">Logi välja</a></li>
 	</ul>
 	<hr>
+	<h2>Näitlejad ja nende rollid filmides</h2>
+	<?php echo $films_html;?>
 </body>
 </html>

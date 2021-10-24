@@ -27,7 +27,7 @@
             $films_html .= "<h3>" .$title_from_db ."</h3> \n";
             $films_html .= "<ul> \n";
             $films_html .= "<li>Valmimisaasta: " .$year_from_db ."</li> \n";
-            $films_html .= "<li>Kestus: " .$duration_from_db ."</li> \n";
+            $films_html .= "<li>Kestus: " .$time = hours_and_minutes($duration_from_db) ."</li> \n";
             $films_html .= "<li>Žanr: " .$genre_from_db ."</li> \n";
             $films_html .= "<li>Tootja: " .$studio_from_db ."</li> \n";
             $films_html .= "<li>Režissöör: " .$director_from_db ."</li> \n";

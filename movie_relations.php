@@ -18,8 +18,10 @@
 	$selected_person = null;
 	$selected_movie = null;
 	$selected_position = null;
+	$selected_role = null;
 	$person_in_movie_error = null;
 	$file_name = null;
+	$quote_input = null;
 	
 	$selected_person_for_photo = null;
 	$photo_upload_submit = null;
@@ -63,6 +65,27 @@
         }
         
     }
+
+	if(isset($_POST["person_quote_in_movie_submit"])){
+		if(isset($_POST["choose_role_input"]) and !empty($_POST["choose_role_input"])){
+			$selected_role = filter_var($_POST["choose_role_input"], FILTER_VALIDATE_INT);
+		} else {
+			$person_in_movie_error .= "Roll on valimata! "; 
+		}
+
+		if(isset($_POST["quote_input"]) and !empty($_POST["quote_input"])){
+			$quote_input = test_input(filter_var($_POST["quote_input"], FILTER_SANITIZE_STRING));
+			if(empty($role)){
+				$person_in_movie_error .= "Palun sisesta normaalne tsitaat!";
+			}
+		} else {
+			$person_in_movie_error .= "Tsitaat on sisestamata!";
+		}
+		
+		if(empty($person_in_movie_error)){
+            $person_in_movie_error = store_quote($selected_role, $quote_input);
+        }
+	}
 	
 	if(isset($_POST["photo_upload_submit"])){
 		//var_dump($_POST);
@@ -116,6 +139,17 @@
     	<input type="submit" name="person_in_movie_submit" value="Salvesta">
     </form>
     <span><?php echo $notice; ?></span>
+	<hr>
+	<h3>Tegelase tsitaat</h3>
+	<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+		<label for="choose_role_input">Roll: </label>
+		<select name="choose_role_input" id="choose_role_input"><option value="" selected disabled>Vali roll</option><?php echo read_all_role($selected_role); ?></select>
+		<br>
+		<label for="quote_input">Tsitaat: </label>
+		<input type="text" name="quote_input" id="quote_input" placeholder="Tegelase tsitaat"></input>
+		<br>
+    	<input type="submit" name="person_quote_in_movie_submit" value="Salvesta">
+    </form>
 	<hr>
 	<h3>Filmi tegelase foto</h3>
 	<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">

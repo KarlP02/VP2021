@@ -15,13 +15,14 @@
 	require_once("fnc_user.php");
 
 	$notice = null;
-	$description = null;
+	$description = read_user_description();
 
 	if(isset($_POST["profile_submit"])){
-		$description = $_POST["description_input"];
-		$bg_color = $_POST["bg_color_input"];
-		$text_color = $_POST["text_color_input"];
-		$notice = store_user_settings($description, $bg_color, $text_color);
+		$description = test_input($_POST["description_input"]);
+
+		$notice = store_user_profile($description, $_POST["bg_color_input"],$_POST["text_color_input"]);
+		$_SESSION["bg_color"] = $_POST["bg_color_input"];
+		$_SESSION["text_color"] = $_POST["text_color_input"];
 	}
 
 	require("page_header.php");
