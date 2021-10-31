@@ -25,6 +25,7 @@
 		<li><a href="add_films.php">Lisa filme</a></li>
 		<li><a href="user_profile.php">Kasutajaprofiil</a></li>
 		<li><a href="movie_relations.php">Filmi info sidumine</a></li>
+		<li><a href="gallery_photo_upload.php">Fotode üleslaadimine</a></li>
 		<li><a href="?logout=1">Logi välja</a></li>
 	</ul>
 	<hr>
