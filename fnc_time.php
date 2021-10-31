@@ -9,7 +9,7 @@
 	}
 
     function hours_and_minutes($duration_from_db){
-        $hours = round($duration_from_db / 60);
+        $hours = floor($duration_from_db / 60);
         $minutes = $duration_from_db % 60;
         $time = $hours ."h" ." " .$minutes ."min";
 
