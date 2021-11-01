@@ -26,6 +26,8 @@
 		<li><a href="user_profile.php">Kasutajaprofiil</a></li>
 		<li><a href="movie_relations.php">Filmi info sidumine</a></li>
 		<li><a href="gallery_photo_upload.php">Fotode üleslaadimine</a></li>
+		<li><a href="gallery_public.php">Sisselogitud kasutajatete jaoks avalik galerii</a></li>
+		<li><a href="gallery_own.php">Minu oma galerii fotod</a></li>
 		<li><a href="?logout=1">Logi välja</a></li>
 	</ul>
 	<hr>

@@ -3,7 +3,7 @@
 	session_start();
 	require_once("fnc_user.php");
 	require_once("../../config.php");
-	$author_name = "Karl Piiber";
+	require_once("fnc_gallery.php");
 	$todays_evaluation = null; //$todays_evaluation = "";
 	$inserted_adjective = null;
 	$adjective_error = null;
@@ -73,10 +73,10 @@ if(isset($_POST["todays_adjective_input"])){
 <html lang="et">
 	<head>
 		<meta charset="utf-8">
-		<title><?php echo $author_name; ?>, veebiprogrammeerimine</title>
+		<title>Veebiprogrammeerimine</title>
 	</head>
 	<body>
-		<h1><?php echo $author_name; ?>, veebiprogrammeerimine</h1>
+		<h1>Veebiprogrammeerimine</h1>
 		<div>
 			<p>See leht on valminud õppetöö raames ja ei sisalda mingisugust tõsiseltvõetavat sisu!</p>
 		</div>
@@ -97,9 +97,11 @@ if(isset($_POST["todays_adjective_input"])){
 		</form>
 		<hr>
 		<?php
-		echo $todays_evaluation;
+			echo $todays_evaluation;
 
 		?>
+		<hr>
+		<?php echo show_latest_public_photo(); ?>
 		<form method="POST">
 			<?php echo $photo_select_html;?>
 			<input type="submit" name="photo_select_button" value="Vali">
