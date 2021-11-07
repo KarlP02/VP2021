@@ -6,10 +6,10 @@
         $privacy = 3;
         $conn = new mysqli($GLOBALS["server_host"], $GLOBALS["server_user_name"], $GLOBALS["server_password"], $GLOBALS["database"]);
 		$conn->set_charset("utf8");
-        $stmt = $conn->prepare("SELECT filename, alttext FROM vp_photos WHERE id = (SELECT MAX(id) FROM vp_photos WHERE privacy = ? AND deleted IS NULL)");
+        $stmt = $conn->prepare("SELECT filename, created, alttext FROM vp_photos WHERE id = (SELECT MAX(id) FROM vp_photos WHERE privacy = ? AND deleted IS NULL)");
         echo $conn->error;
         $stmt->bind_param("i", $privacy);
-        $stmt->bind_result($filename_from_db, $alttext_from_db);
+        $stmt->bind_result($filename_from_db, $created_from_db, $alttext_from_db);
         $stmt->execute();
         if($stmt->fetch()){
             //<img src="kataloog.file" alt="tekst">
@@ -20,6 +20,7 @@
                 $photo_html .= $alttext_from_db;
             }
             $photo_html .= '">' ."\n";
+            $photo_html .= '<p>Üleslaetud: ' .date_to_est_format($created_from_db) .'</p>' ."\n";
         }
         if(empty($photo_html)){
             $photo_html = "<p>Kahjuks avalikke fotosid üles laetud pole!</p> \n";
@@ -94,40 +95,40 @@
     }
  */
 
-function read_own_photo_thumbs($page_limit, $page){
-    $gallery_html = null;
-    $skip = ($page - 1) * $page_limit;
-    $conn = new mysqli($GLOBALS["server_host"], $GLOBALS["server_user_name"], $GLOBALS["server_password"], $GLOBALS["database"]);
-    $conn->set_charset("utf8");
-    $stmt = $conn->prepare("SELECT id, filename, alttext FROM vp_photos WHERE userid = ? AND deleted IS NULL ORDER BY id DESC LIMIT ?, ?");
-    echo $conn->error;
-    $stmt->bind_param("iii", $_SESSION["user_id"], $skip, $page_limit);
-    $stmt->bind_result($id_from_db, $filename_from_db, $alttext_from_db);
-    $stmt->execute();
-    while($stmt->fetch()){
-        //<div class="thumbgallery">
-        //<img src="kataloog.file" alt="tekst">
-        //</div>
-        $gallery_html .= '<div class="thumbgallery">' ."\n";
-        $gallery_html .= '<a href="edit_gallery_photo.php?photo=' .$id_from_db .'">';
-        $gallery_html .= '<img src="' .$GLOBALS["photo_thumbnail_upload_dir"] .$filename_from_db .'" alt="';
-        if(empty($alttext_from_db)){
-            $gallery_html .= "Üleslaetud foto";
-        } else {
-            $gallery_html .= $alttext_from_db;
+    function read_own_photo_thumbs($page_limit, $page){
+        $gallery_html = null;
+        $skip = ($page - 1) * $page_limit;
+        $conn = new mysqli($GLOBALS["server_host"], $GLOBALS["server_user_name"], $GLOBALS["server_password"], $GLOBALS["database"]);
+        $conn->set_charset("utf8");
+        $stmt = $conn->prepare("SELECT id, filename, alttext FROM vp_photos WHERE userid = ? AND deleted IS NULL ORDER BY id DESC LIMIT ?, ?");
+        echo $conn->error;
+        $stmt->bind_param("iii", $_SESSION["user_id"], $skip, $page_limit);
+        $stmt->bind_result($id_from_db, $filename_from_db, $alttext_from_db);
+        $stmt->execute();
+        while($stmt->fetch()){
+            //<div class="thumbgallery">
+            //<img src="kataloog.file" alt="tekst">
+            //</div>
+            $gallery_html .= '<div class="thumbgallery">' ."\n";
+            $gallery_html .= '<a href="edit_gallery_photo.php?photo=' .$id_from_db .'">';
+            $gallery_html .= '<img src="' .$GLOBALS["photo_thumbnail_upload_dir"] .$filename_from_db .'" alt="';
+            if(empty($alttext_from_db)){
+                $gallery_html .= "Üleslaetud foto";
+            } else {
+                $gallery_html .= $alttext_from_db;
+            }
+            $gallery_html .= '" class="thumbs">' ."\n";
+            $gallery_html .= "</a> \n";
+            $gallery_html .= '</div>' ."\n";
         }
-        $gallery_html .= '" class="thumbs">' ."\n";
-        $gallery_html .= "</a> \n";
-        $gallery_html .= '</div>' ."\n";
+        if(empty($gallery_html)){
+            $gallery_html = "<p>Kahjuks avalikke fotosid üles laetud pole!</p> \n";
+        }
+        
+        $stmt->close();
+        $conn->close();
+        return $gallery_html;
     }
-    if(empty($gallery_html)){
-        $gallery_html = "<p>Kahjuks avalikke fotosid üles laetud pole!</p> \n";
-    }
-    
-    $stmt->close();
-    $conn->close();
-    return $gallery_html;
-}
 
 
     function count_public_photos($privacy){
@@ -146,4 +147,24 @@ function read_own_photo_thumbs($page_limit, $page){
         $stmt->close();
 		$conn->close();
 		return $photo_count;
+    }
+
+    function edit_own_photos(){
+        $notice = null;
+        $conn = new mysqli($GLOBALS["server_host"], $GLOBALS["server_user_name"], $GLOBALS["server_password"], $GLOBALS["database"]);
+        $conn->set_charset("utf8");
+        $stmt = $conn->prepare("SELECT id, filename FROM vp_photos WHERE userid = ? AND deleted IS NULL");
+        echo $conn->error;
+        $stmt->bind_param("i", $_SESSION["user_id"]);
+        $stmt->bind_result($id_from_db, $filename_from_db);
+        $stmt->execute();
+        if($stmt->fetch()){
+            $notice = '<img src="' .$GLOBALS["photo_orig_upload_dir"] .$filename_from_db .'">';
+        }// else {
+        //     header("Location: gallery_own.php");
+        // }
+
+        $stmt->close();
+		$conn->close();
+		return $notice;
     }

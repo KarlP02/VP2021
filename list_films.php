@@ -12,7 +12,7 @@
 	require_once("../../config.php");
 	//echo $server_host;
 	require_once("fnc_film.php");
-	require_once("fnc_time.php");
+	require_once("fnc_general.php");
 	$films_html = null;
 	$films_html = read_all_films();
 

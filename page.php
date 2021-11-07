@@ -4,6 +4,7 @@
 	require_once("fnc_user.php");
 	require_once("../../config.php");
 	require_once("fnc_gallery.php");
+	require_once("fnc_general.php");
 	$todays_evaluation = null; //$todays_evaluation = "";
 	$inserted_adjective = null;
 	$adjective_error = null;

@@ -29,11 +29,11 @@
 	<p>Õppetöö toimus <a href="https://www.tlu.ee/dt">Tallinna Ülikooli Digitehnoloogiate instituudis</a>.</p>
 	<hr>
     <ul>
+		<li><a href="gallery_own.php">Tagasi</a></li>
         <li><a href="?logout=1">Logi välja</a></li>
-		<li><a href="home.php">Avaleht</a></li>
     </ul>
 	<hr>
     <h2>Foto andmete muutmine</h2>
-    <?php //echo read_own_photo_thumbs($page_limit, $page); ?>
+    <?php echo edit_own_photos($photo_id); ?>
 </body>
 </html>
