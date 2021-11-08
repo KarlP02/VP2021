@@ -13,6 +13,7 @@
 	
     require_once("../../config.php");
 	require_once("fnc_gallery.php");
+	require_once("fnc_general.php");
 
 	$page = 1;
 	$page_limit = 3;
