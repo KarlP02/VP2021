@@ -19,11 +19,12 @@
         
         function __destruct(){
             if(isset($this->my_temp_image)){
-                imagedestroy($this->my_temp_image);
+                @imagedestroy($this->my_temp_image);
             }
         }
         
         private function check_image(){
+			$error = null;
             $image_check = getimagesize($this->photo_to_upload["tmp_name"]);
             if($image_check !== false){
                 if($image_check["mime"] == "image/jpeg"){
@@ -37,16 +38,35 @@
                 }
                 //var_dump($image_check);
             } else {
-                $this->error = "Valitud fail ei ole pilt!";
+				$error = "Valitud fail ei ole pilt!";
+                $this->error = $error;
             }
+			return $error;
         }
         
         public function check_size($limit){
-            if(empty($this->error) and $this->photo_to_upload["size"] > $limit){
-                $this->error .= "Valitud fail on liiga suur!";
+			$error = null;
+            if($this->photo_to_upload["size"] > $limit){
+                $error = "Valitud fail on liiga suur!";
+				$this->error = $error;
             }
             return $this->error;
         }
+		
+		public function check_alowed_type($allowed_types){
+			$error = null;
+			$file_info = getimagesize($this->photo_to_upload["tmp_name"]);
+			if(isset($file_info["mime"])){
+				if(!in_array($file_info["mime"], $allowed_types)){
+					$error = "Valitud foto fail pole lubatud tüüpi!";
+					$this->error = $error;
+				}
+			} else {
+					$error = "Valitud faili tüüpi ei õnnestu kontrollida!";
+					$this->error = $error;
+				}
+			return $error;
+		}
         
         public function create_filename($prefix){
             $time_stamp = microtime(1) * 10000;
