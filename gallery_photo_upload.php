@@ -1,15 +1,5 @@
 <?php
-    //alustame sessiooni
-    session_start();
-    //kas on sisselogitud
-    if(!isset($_SESSION["user_id"])){
-        header("Location: page.php");
-    }
-    //väljalogimine
-    if(isset($_GET["logout"])){
-        session_destroy();
-        header("Location: page.php");
-    }
+	require_once("use_session.php");
 	
     require_once("../../config.php");
 	require_once("fnc_photo_upload.php");
@@ -98,8 +88,8 @@
 	<p>Õppetöö toimus <a href="https://www.tlu.ee/dt">Tallinna Ülikooli Digitehnoloogiate instituudis</a>.</p>
 	<hr>
     <ul>
-        <li><a href="?logout=1">Logi välja</a></li>
 		<li><a href="home.php">Avaleht</a></li>
+        <li><a href="?logout=1">Logi välja</a></li>
     </ul>
 	<hr>
     <h2>Foto üleslaadimine</h2>
